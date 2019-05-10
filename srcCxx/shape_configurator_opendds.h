@@ -9,6 +9,27 @@
 #include "dds/DCPS/transport/framework/TransportRegistry.h"
 #include "dds/DCPS/transport/rtps_udp/RtpsUdp.h"
 
+#ifndef _POSIX_C_SOURCE
+#include "ace/OS_NS_unistd.h"
+#include "ace/Get_Opt.h"
+
+using ACE_OS::sigemptyset;
+using ACE_OS::sigaddset;
+using ACE_OS::sigaction;
+#define usleep(USEC) ACE_OS::sleep(ACE_Time_Value(0, USEC))
+
+static char* optarg;
+
+int getopt(int argc, char** argv, const char opts[])
+{
+  static ACE_Get_Opt ago(argc, argv, opts);
+  const int ret = ago();
+  optarg = ago.opt_arg();
+  return ret;
+}
+
+#endif
+
 #define OBTAIN_DOMAIN_PARTICIPANT_FACTORY TheParticipantFactory
 #define LISTENER_STATUS_MASK_ALL OpenDDS::DCPS::ALL_STATUS_MASK
 #define REGISTER_TYPE org::omg::dds::demo::ShapeTypeTypeSupport_var ts = \

@@ -40,3 +40,5 @@ objs/
 # Other
 *~
 GeneratedCode
+.vs/
+*.sln

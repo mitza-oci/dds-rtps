@@ -9,12 +9,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <ctype.h>
 #include <time.h>
 #include <signal.h>
 #include <string.h>
 #include <stdarg.h>
+
+#ifdef _POSIX_C_SOURCE
+#include <unistd.h>
+#endif
 
 #if defined(RTI_CONNEXT_DDS)
 #include "shape_configurator_rti_connext_dds.h"
@@ -697,7 +700,7 @@ public:
         ShapeType_initialize(&shape);
 #endif
 
-        srandom((uint32_t)time(NULL));
+        srand(time(NULL));
 
 #ifndef STRING_ALLOC
 #define STRING_ALLOC(A, B)
@@ -706,10 +709,10 @@ public:
         strcpy(shape.color STRING_INOUT, color);
 
         shape.shapesize = 20;
-        shape.x    =  random() % da_width;
-        shape.y    =  random() % da_height;
-        xvel       =  ((random() % 5) + 1) * ((random()%2)?-1:1);
-        yvel       =  ((random() % 5) + 1) * ((random()%2)?-1:1);;
+        shape.x    =  rand() % da_width;
+        shape.y    =  rand() % da_height;
+        xvel       =  ((rand() % 5) + 1) * ((rand() % 2) ? -1 : 1);
+        yvel       =  ((rand() % 5) + 1) * ((rand() % 2) ? -1 : 1);
 
         while ( ! all_done )  {
             moveShape(&shape);
